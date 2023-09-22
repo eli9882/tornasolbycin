@@ -1,0 +1,100 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11-15-2022, 02:56:48 PM
+    Author     : Dell
+*/
+
+#registro{
+    width: 20%;
+    height: 100vh;
+     padding-left: 5vh;
+}
+
+#prueba{
+    width: 80%;
+    height: 100vh; 
+     padding-left: 25vh;
+}
+
+#pantalla{
+    display: flex;
+}
+
+#tabla1{
+    width: 89%;
+    height: 100vh;
+    padding-left: 68vh;
+    position: absolute; 
+    
+     top: 45vh;
+     bottom: 150vh;
+    
+   
+}
+#tabla2{
+    width: 100%;
+    height: 90vh;
+    padding-left: 190vh;
+     position: absolute; 
+    
+       top: 45vh;
+     bottom: 170vh;
+  
+}
+#pantalla2{
+    display: flex;
+}
+#pantalla3{
+    display: flex;
+}
+#pantalla6{
+    display: flex;
+}
+#tabla3{
+    width: 30%;
+    height: 100vh;
+    padding-left: 3vh;
+  
+     position: absolute; 
+    
+     top: 45vh;
+     bottom: 150vh;
+     
+}
+    
+     #tabla1carrito{
+    
+     width: 90%;
+     height: 100vh;
+     
+     padding-left: 4vh;
+      
+     
+     }
+     #tbsubtotal{
+         width: 20%;
+     height: 100vh;
+     padding-left: 2vh;
+      padding-right: 2vh;
+    
+     }
+
+     #pantalla2d{
+          display: flex;
+     }
+     #tabla1d{
+       width: 90%;
+     height: 100vh;
+     
+     padding-left: 4vh;  
+     }
+     #tabla2d{
+           width: 20%;
+     height: 100vh;
+     padding-left: 2vh;
+     padding-right: 2vh;
+     }

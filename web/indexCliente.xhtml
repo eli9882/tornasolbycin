@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <link type="text/css" rel="stylesheet" href="https://www.primefaces.org/showcase/javax.faces.resource/css/layout/layout.css.xhtml?ln=showcase"></link>
+
+    </h:head>
+
+    <div id="wrapper ">
+        <center>
+            <img src="resources/images/logoto.jpg" width="200" height="100"  />
+
+        </center>
+    </div>
+
+    <h:body>
+        <div class="card">
+            <h:form id = "mainp">
+                <p:growl id="messages"/>
+
+                <p:menubar>
+                    <p:submenu id="menu" icon="pi pi-align-justify">
+
+                        <p:menuitem value="Inicio" icon="pi pi-home" actionListener="#{controladorLogin.ingresarHome()}"/>
+                        <p:divider />
+                        <p:menuitem value="Carrito" icon="pi pi-shopping-cart" actionListener="#{controladorLogin.ingresarCarrito()}"/>
+                        <p:divider />
+                        <p:menuitem value="Iniciar Sesión" icon="pi pi-user" actionListener="#{controladorLogin.ingresarLogin()}"/>
+                        <p:divider />
+                        <p:menuitem value="Política" icon="pi pi-file"/>
+                        <p:divider />
+                        <p:menuitem value="Términos de Uso" icon="pi pi-file"/>
+                        <p:divider />
+                        <p:menuitem value="Perfil" icon="pi pi-user" actionListener="#{controladorLogin.ingresarVerPerfil()}" rendered="#{controladorLogin.incioSesion}"/>
+                        <p:divider />
+                        <p:menuitem value="Productos" icon="pi pi-pencil" actionListener="#{loginController.ingresar()}" rendered="#{loginController.tienePermisos}"/>
+
+                    </p:submenu>
+
+                    <p:divider layout="vertical"/>
+                    <f:facet name="options">
+                        <p:commandButton icon="pi pi-search" styleClass="rounded-button ui-button-help" actionListener="#{controladorLogin.search()}" update="mainp" />
+                        <p:inputText placeholder="Search" value="#{controladorLogin.busqueda}"/>
+
+
+
+                        <p:growl id="growl" life="1000" showDetail="true"/>
+                        <p:commandButton icon="pi pi-user" styleClass="rounded-button ui-button-help" actionListener="#{controladorLogin.ingresarVerPerfil()}" update="growl" />
+                        <p:commandButton icon="pi pi-shopping-cart" styleClass="rounded-button ui-button-help" actionListener="#{controladorLogin.ingresarCarritoC()}" update="mainp" />
+                        <p:commandButton type="button" icon="pi pi-heart" styleClass="rounded-button ui-button-help" />
+
+                    </f:facet>
+                </p:menubar>
+
+
+                <p:dataTable value="#{controladorLogin.listaProductos}" var="myVarproducto" id="datatable-productos"  rows="5"
+                             paginator="true" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                             rowsPerPageTemplate="5,10,15,{ShowAll|'All'}">
+
+
+
+                    <p:column headerText="Foto">
+                        <h:outputText value="#{myVarproducto.fotoProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{myVarproducto.nombreProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{myVarproducto.descripcionProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{myVarproducto.precioProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{myVarproducto.estadoProducto}" />
+                    </p:column>
+
+
+                    <p:column headerText="Accion">
+
+
+
+                        <p:commandButton icon="pi pi-shopping-cart" styleClass="rounded-button ui-button-help" actionListener="#{crudView.AgregarDetalle(myVarproducto)}"  update="mainp"/>
+                        <p:commandButton icon="pi pi-eye" update=":dialogs:manage-product-content"
+                                         oncomplete="PF('manageProductDialog').show()"
+                                         styleClass="rounded-button ui-button-help" process="@this">
+
+                        </p:commandButton>
+
+
+
+                    </p:column>
+
+                </p:dataTable>
+
+
+            </h:form>
+
+            <h:form id="dialogs">
+
+
+
+                <p:dialog header="Información del producto" showEffect="fade" modal="true" 
+                          widgetVar="manageProductDialog"
+                          responsive="true">
+
+                    <p:growl id="messagesDialog" life="1000" showDetail="true"/>
+
+                    <p:outputPanel id="manage-product-content" class="ui-fluid">
+
+
+                        <div class="field">
+                            <p:outputLabel for="nombre">Nombre: </p:outputLabel> 
+                            <p:outputLabel id="nombre" value="#{crudView.selectedProducto.nombreProducto}"/>
+                        </div>
+
+                        <div class="field">
+                            <p:outputLabel for="descripcion">Descripcion: </p:outputLabel> 
+                            <p:outputLabel id="descripcion" value="#{crudView.selectedProducto.descripcionProducto}"/>
+                        </div>
+
+                        <div class="field">
+                            <p:outputLabel for="precio">Precio: </p:outputLabel> 
+                            <p:outputLabel id="precio" value="#{crudView.selectedProducto.precioProducto}"/>
+                        </div>
+
+                        <div class="field">
+                            <p:outputLabel for="estado">Estado: </p:outputLabel> 
+                            <p:outputLabel id="estado" value="#{crudView.selectedProducto.estadoProducto}"/>
+                        </div>
+
+                    </p:outputPanel>
+
+
+                    <f:facet name="footer">
+
+                        <p:commandButton value="Volver" actionListener="#{controladorLogin.ingresarHome()}"/>
+
+                    </f:facet>
+                </p:dialog>
+            </h:form>
+        </div>
+
+
+
+
+    </h:body>
+
+    <footer>
+        <div> 
+            <center>
+
+                <h7>Términos y condiciones| Política de uso y privacidad |Política de cookies |Aviso legal</h7>
+                <h7>© Tornasol by Cin desde 2022</h7>
+
+
+            </center>
+        </div>
+    </footer>
+</html>

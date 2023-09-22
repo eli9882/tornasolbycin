@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Facelet Title</title>
+        <link type="text/css" rel="stylesheet" href="https://www.primefaces.org/showcase/javax.faces.resource/css/layout/layout.css.xhtml?ln=showcase"></link>
+
+    </h:head>
+
+    <div id="wrapper ">
+        <center>
+            <img src="resources/images/logoto.jpg" width="200" height="100"  />
+
+        </center>
+    </div>
+    <h:body>
+        <h:form>
+            <p:menubar >
+                <p:submenu id="menu" icon="pi pi-align-justify" >
+
+                  
+                    <p:menuitem value="Inicio" icon="pi pi-home" actionListener="#{controladorLogin.ingresarHome()}"/>
+                    <p:divider />
+                    <p:menuitem value="Carrito" icon="pi pi-shopping-cart" actionListener="#{controladorLogin.ingresarCarrito()}"/>
+                    <p:divider />
+                    <p:menuitem value="Iniciar Sesión" icon="pi pi-user" actionListener="#{controladorLogin.ingresarLogin()}"/>
+
+                    <p:divider />
+                    <p:menuitem value="Perfil" icon="pi pi-user" actionListener="#{controladorLogin.ingresarVerPerfil()}" rendered="#{controladorLogin.incioSesion}"/>
+                    <p:divider />
+                    <p:menuitem value="Productos" icon="pi pi-pencil" actionListener="#{loginController.ingresar()}" rendered="#{loginController.tienePermisos}"/>
+                    <p:divider />
+                    <p:menuitem value="Política de Privacidad" icon="pi pi-file" actionListener="#{controladorLogin.ingresarprivacidad()}"/>
+                    <p:divider />
+                    <p:menuitem value="Términos de Uso" icon="pi pi-file" actionListener="#{controladorLogin.ingresarterminos()}" />
+
+
+                </p:submenu>
+
+                <p:divider layout="vertical"/>
+                <f:facet name="options">
+                    <div class="ui-input-icon-left mr-2">
+                        <i class="pi pi-fw pi-search" />
+                        <p:inputText placeholder="Search"/>
+                    </div>
+
+
+                    <p:growl id="growl" life="1000" showDetail="true"/>
+                    <p:commandButton icon="pi pi-user" styleClass="rounded-button ui-button-help" actionListener="#{controladorLogin.ingresarLogin()}" update="growl" />
+                    <p:commandButton icon="pi pi-shopping-cart" styleClass="rounded-button ui-button-help" actionListener="#{controladorLogin.ingresarCarrito()}" update="growl"/>
+                    <p:commandButton icon="pi pi-heart" actionListener="#{crudView.ingresarListaDeseo()}" styleClass="rounded-button ui-button-danger ui-button-outlined" rendered="#{controladorLogin.incioSesion}" />
+
+                </f:facet>
+            </p:menubar>
+        </h:form>
+
+        <center>
+            <h:body>
+                <h3 style ="text-align: center;">Ingresar al sistema</h3>
+
+                <h:form>
+                    <p:growl id="growl" life="1000" showDetail="true"/>
+                    <p:panelGrid columns="2">
+
+                        Nueva Contraseña: <p:password value="#{controladorLogin.claveNueva}" required ="false" requiredMessage="Escriba algo por favor"/>
+                        Confirmar Contraseña: <p:password value="#{controladorLogin.claveConfirm}" required="false" requiredMessage="Escriba algo por favor"/>
+                        <p:commandButton value="Volver" actionListener="#{controladorLogin.ingresarHome()}" update="growl"/>
+                        <p:commandButton value="Cambiar" actionListener="#{controladorLogin.cambiarContra()}" update="growl"/>
+
+                    </p:panelGrid>
+                </h:form>
+            </h:body>
+        </center>
+
+    </h:body>
+
+</html>
+
+
+
+
+
+

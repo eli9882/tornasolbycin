@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+
+
+
+    <h:body>   
+
+        <div id="wrapper ">
+            <center>
+                <img src="resources/images/logoto.jpg" width="200" height="100"  />
+            </center>
+        </div>
+        <h:form>
+            <p:growl id="messages"/>
+            <p:menubar>
+                <p:submenu id="menu" icon="pi pi-align-justify">
+
+                    <p:menuitem value="Inicio" icon="pi pi-home" actionListener="#{controladorLogin.ingresarHome()}"/>
+                    <p:divider />
+                    <p:menuitem value="Carrito" icon="pi pi-shopping-cart" actionListener="#{controladorLogin.ingresarCarrito()}"/>
+                    <p:divider />
+                    <p:menuitem value="Deseo" icon="pi pi-heart" actionListener="#{crudView.ingresarListaDeseo()}" rendered="#{controladorLogin.incioSesion}" />
+                    <p:divider />
+                    <p:menuitem value="Política" icon="pi pi-file"/>
+                    <p:divider />
+                    <p:menuitem value="Términos de Uso" icon="pi pi-file"/>
+                    <p:divider />
+                    <p:menuitem value = "Ordenes" icon="pi pi-chart-line" actionListener="#{controladorLogin.ingresarOrdenesAdmin()}" rendered="#{controladorLogin.tienePermisos}"/>
+                    <p:divider />
+                    <p:menuitem value="Salir" icon="pi pi-sign-out" actionListener="#{controladorLogin.cerrarSesion()}" />
+                </p:submenu>
+
+                <p:divider layout="vertical"/>
+                <f:facet name="options">
+                    <p:growl id="growl" life="1000" showDetail="true"/>
+
+                </f:facet>
+            </p:menubar>
+        </h:form>
+
+        <h:form id="form">
+            <p:growl id="messages" life="1000" showDetail="true"/>
+            <p:dataTable id="datatable-productos" value="#{controladorLogin.listaProductos}" var="myVarProductos" stripedRows="true">
+                <f:facet name="header">
+                    Lista de Productos
+                    <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{crudViewADMIN.openNewBoth()}"
+                                     update=":dialogs:manage-product-content" oncomplete="PF('manageProductDialog').show()"
+                                     styleClass="ui-button-raised ui-button-outlined ui-button-help" style="margin-left: .8rem">
+                        <p:resetInput target=":dialogs:manage-product-content" />
+                    </p:commandButton>
+                    <h:outputText value="  Utilidad Ganada Total: "/>
+                    <h:outputText value="#{crudViewADMIN.retornarUtilidadTotal()}" >
+                        <f:convertNumber   currencySymbol="₡" pattern="¤ #,##0.00" groupingUsed="true" maxFractionDigits="2" type="currency"></f:convertNumber>
+                    </h:outputText>
+                    <p:commandButton icon="pi pi-search" styleClass="rounded-button ui-button-help ui-button-outlined" actionListener="#{crudViewADMIN.buscar()}" update="datatable-productos" style="margin-left: 70rem"/>
+                    <p:inputText placeholder="Buscar" value="#{crudViewADMIN.buscador}"/>
+                </f:facet>
+                <p:column headerText="Id">
+                    <h:outputText value="#{myVarProductos.idProducto}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{myVarProductos.nombreProducto}" />
+                </p:column>
+                <p:column headerText="Descripción">
+                    <h:outputText value="#{myVarProductos.descripcionProducto}" />
+                </p:column>
+                <p:column headerText="Foto">
+                    <p:graphicImage id="imagenTabla" name="#{myVarProductos.fotoProducto}" library="images" styleClass="product-image" style="width: 100px; height: 80px;" />
+                </p:column>
+                <p:column headerText="Porcentaje Ganancia">
+                    <h:outputText value="#{myVarProductos.gananciaProducto}%" />
+                </p:column>
+                <p:column headerText="Utilidad">
+                    <h:outputText value="#{crudViewADMIN.retornarCostoTotal(myVarProductos.idProducto, myVarProductos.precioProducto)}">
+                        <f:convertNumber   currencySymbol="₡" pattern="¤ #,##0.00" groupingUsed="true" maxFractionDigits="2" type="currency"></f:convertNumber>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Precio al Público" >
+                    <h:outputText value="#{myVarProductos.precioProducto}">
+                        <f:convertNumber   currencySymbol="₡" pattern="¤ #,##0.00" groupingUsed="true" maxFractionDigits="2" type="currency"></f:convertNumber>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{myVarProductos.estadoProducto}" />
+                </p:column>
+                <p:column headerText="Me Gustas">
+                    <h:outputText value="#{myVarProductos.meGustaProducto}" />
+                </p:column>
+
+                <p:column>
+                    <p:commandButton id="boton-editar1" icon="pi pi-pencil" update=":dialogs:manage-product-content" 
+                                     oncomplete="PF('manageProductDialog').show()" 
+                                     styleClass="rounded-button ui-button-info ui-button-outlined" process="@this">
+                        <p:tooltip for="boton-editar1" value="Editar Informacion Producto" position="left"/>
+                        <f:setPropertyActionListener value="#{myVarProductos}" target="#{crudViewADMIN.productoSelected}" />                    
+                    </p:commandButton>
+                    <p:commandButton id="boton-editar2" icon="pi pi-list" update=":dialogAccesorio:manage-accesorio-content"
+                                     oncomplete="PF('manageAccesorioDialog').show()" 
+                                     styleClass="rounded-button ui-button-warning ui-button-outlined" process="@this" style="margin-left: .6rem">
+                        <p:tooltip for="boton-editar2" value="Editar Articulos/Precio Producto" position="left"/>
+                        <f:setPropertyActionListener value="#{myVarProductos}" target="#{crudViewADMIN.productoSelected}" />                        
+                    </p:commandButton>
+                    <p:commandButton id="boton-desactivar" class="ui-button-warning rounded-button" icon="pi pi-sort" style="margin-left: .6rem"
+                                     process="@this"
+                                     oncomplete="PF('deleteProductDialog').show()" styleClass="rounded-button ui-button-danger ui-button-outlined">
+                        <p:tooltip for="boton-desactivar" value="Activar/Desactivar Producto" position="left"/>
+                        <f:setPropertyActionListener value="#{myVarProductos}" target="#{crudViewADMIN.productoSelected}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+
+
+
+        <h:form id="dialogs">
+            <p:dialog header="Información del producto" showEffect="fade" modal="true" width="765" height="433" 
+                      widgetVar="manageProductDialog"
+                      responsive="true">
+                <p:growl id="messagesDialog" life="1000" showDetail="true"/>
+                <p:outputPanel id="manage-product-content" class="ui-fluid">
+                    <div class="field">
+                        <p:outputLabel for="nombre">Nombre</p:outputLabel>
+                        <p:inputText id="nombre" value="#{crudViewADMIN.productoSelected.nombreProducto}" required="true" requiredMessage="Nombre requerido"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="descripción">Descripción</p:outputLabel>
+                        <p:inputTextarea id="descripción" value="#{crudViewADMIN.productoSelected.descripcionProducto}"  required="true" requiredMessage="Descripcion requerido" />
+                    </div>
+                    <div class="card">
+                        <p:outputLabel>Imagen</p:outputLabel>
+                        <p:fileUpload id="imagen"
+                                      mode="advanced"
+                                      multiple="true"
+                                      fileLimit="1"
+                                      sizeLimit="1209901" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                      invalidSizeMessage="Maximum file size allowed is 100 KB"
+                                      invalidFileMessage="only gif | jpg | jpeg | png is allowed"
+                                      update="messagesDialog"
+                                      listener="#{fileUploadView.handleFileUpload}"/>
+                    </div>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{crudViewADMIN.saveProduct()}"
+                                     update=":form:datatable-productos manage-product-content messagesDialog :form:datatable-productos:imagenTabla" 
+                                     oncomplete="PF('manageProductDialog').hide()" process="manage-product-content @this" 
+                                     styleClass="ui-button-help ui-button-raised ui-button-outlined"/>
+                    <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                     class="ui-button-secondary" type="button" styleClass="ui-button-secondary ui-button-raised ui-button-outlined"/>
+                </f:facet>
+            </p:dialog>
+
+
+
+
+            <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                             message="¿Desea activar/desactivar este producto?" header="¡Advertencia!" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{crudViewADMIN.actualizarEstadoProduct()}"
+                                 process="@this" update=":form:datatable-productos"
+                                 oncomplete="PF('deleteProductDialog').hide()" styleClass="ui-button-help ui-button-raised ui-button-outlined" 
+                                 style="margin-right: 6.5rem"/>
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary ui-button-raised ui-button-outlined" icon="pi pi-times"
+                                 onclick="PF('deleteProductDialog').hide()" />
+            </p:confirmDialog>
+            <p:confirmDialog widgetVar="deleteAccesorioDialog" showEffect="fade" width="300"
+                             message="¿Desea eliminar este accesorio?" header="¡Advertencia!" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{crudViewADMIN.deleteAccesorio()}"
+                                 process="@this" update=":dialogAccesorio:datatable-accesorios dialogAccesorio:messagesAccesorioDialog dialogAccesorio:PrecioRecomendado dialogAccesorio:PrecioReal :form:datatable-productos"
+                                 oncomplete="PF('deleteAccesorioDialog').hide()" styleClass="ui-button-help ui-button-raised ui-button-outlined" 
+                                 style="margin-right: 6.5rem" />
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary ui-button-raised ui-button-outlined" icon="pi pi-times"
+                                 onclick="PF('deleteAccesorioDialog').hide()" />
+            </p:confirmDialog>
+        </h:form>
+
+
+
+
+        <h:form id="dialogAccesorio">
+            <p:dialog header="Accesorios y Precio" showEffect="fade" modal="true" width="750" height="450" 
+                      widgetVar="manageAccesorioDialog"
+                      responsive="true">
+                <p:growl id="messagesAccesorioDialog" life="6000" showDetail="true"/>
+                <p:outputPanel id="manage-accesorio-content" class="ui-fluid">
+                    <p:inputText id="nombreProdcutoA" value="Editando accesorio y precio de #{crudViewADMIN.productoSelected.nombreProducto}" disabled="true" style="font-size: 1rem; border: #ffffff"/>
+                    <br/>
+                    <hr/>
+                    <div class="field">
+                        <p:dataTable id="datatable-accesorios" value="#{crudViewADMIN.productoSelected.listaAccesorios}" var="myVarAccesorios" >
+                            <f:facet name="header">
+                                Lista de Accesorios
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{crudViewADMIN.openNewAccesorio()}"
+                                                 oncomplete="PF('manageAccesorioAgregarDialog').show()" update=":dialog-Agregar-A:manage-accesorio-agregar-content"
+                                                 styleClass="ui-button-raised ui-button-outlined ui-button-help" style="width: 6.5rem">
+                                </p:commandButton>
+                            </f:facet>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{myVarAccesorios.nombreAccesorio}" />
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="X#{myVarAccesorios.cantidadAccesorio}" />
+                            </p:column>
+                            <p:column headerText="Costo Unidad">
+                                <h:outputText value="#{myVarAccesorios.precioUAccesorio}" >
+                                    <f:convertNumber   currencySymbol="₡" pattern="¤ #,##0.00" groupingUsed="true" maxFractionDigits="2" type="currency"></f:convertNumber>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Subtotal Accesorio">
+                                <h:outputText value="#{myVarAccesorios.cantidadAccesorio*myVarAccesorios.precioUAccesorio}">
+                                    <f:convertNumber   currencySymbol="₡" pattern="¤ #,##0.00" groupingUsed="true" maxFractionDigits="2" type="currency"></f:convertNumber>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton id="boton-editar1" icon="pi pi-pencil" update=":dialog-Agregar-A:manage-accesorio-agregar-content" 
+                                                 oncomplete="PF('manageAccesorioAgregarDialog').show()" 
+                                                 styleClass="rounded-button ui-button-info ui-button-outlined" process="@this">
+                                    <f:setPropertyActionListener value="#{myVarAccesorios}" target="#{crudViewADMIN.accesorioSelected}" />                    
+                                </p:commandButton>
+                                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                                 process="@this"
+                                                 oncomplete="PF('deleteAccesorioDialog').show()" styleClass="rounded-button ui-button-danger ui-button-outlined" style="margin-left: .6rem">
+                                    <f:setPropertyActionListener value="#{myVarAccesorios}" target="#{crudViewADMIN.accesorioSelected}"  />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <div class="field">
+                        <p:outputLabel for="ganancia">Porcentaje de Ganancia</p:outputLabel>
+                        <p:inputNumber id="ganancia" value="#{crudViewADMIN.productoSelected.gananciaProducto}" symbol="%" symbolPosition="s" emptyValue="zero"/>
+                    </div>
+                    <br/>
+                    <div class="field">
+                        <p:commandButton icon="pi pi-replay" value="Actualizar Precio" update="PrecioRecomendado precio PrecioReal"
+                                         actionListener="#{crudViewADMIN.refrescarPrecioTotal()}"
+                                         styleClass="ui-button-raised ui-button-outlined ui-button-help" style="width: 11rem"
+                                         process="manage-accesorio-content @this">
+                        </p:commandButton>
+                    </div>
+                    <br/>
+                    <div class="field">
+                        <p:outputLabel>Costo Total</p:outputLabel>
+                        <p:inputNumber id="PrecioReal" value="#{crudViewADMIN.calcularPrecioReal()}" symbol="₡" disabled="true"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel>Precio Recomendado</p:outputLabel>
+                        <p:inputNumber id="PrecioRecomendado" value="#{crudViewADMIN.calcularPrecio()}" symbol="₡" disabled="true"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="precio">Precio al Público</p:outputLabel>
+                        <p:inputNumber id="precio" value="#{crudViewADMIN.productoSelected.precioProducto}" symbol="₡" />
+                        <br/>
+                        <p:outputLabel id="Aviso" rendered="#{crudViewADMIN.sinGanancia(crudViewADMIN.calcularPrecioReal(), crudViewADMIN.productoSelected.precioProducto)}" value="¡Aviso, el precio al publico es menor al costo total!" style="color: red" > </p:outputLabel>                       
+                    </div>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{crudViewADMIN.saveProduct()}"
+                                     update=":form:datatable-productos manage-accesorio-content messagesAccesorioDialog" 
+                                     oncomplete="PF('manageAccesorioDialog').hide()" 
+                                     styleClass="ui-button-help ui-button-raised ui-button-outlined"/>
+                    <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('manageAccesorioDialog').hide()"
+                                     class="ui-button-secondary" type="button" styleClass="ui-button-secondary ui-button-raised ui-button-outlined"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+
+
+
+
+
+
+
+
+        <h:form id="dialog-Agregar-A">
+            <p:dialog header="Agregar Accesorio" showEffect="fade" modal="true" width="500" height="350" 
+                      widgetVar="manageAccesorioAgregarDialog"
+                      responsive="true">
+                <p:growl id="messagesAccesorioAgregarDialog" life="1000" showDetail="true"/>
+                <p:outputPanel id="manage-accesorio-agregar-content" class="ui-fluid">
+                    <div style="text-align: center">
+                        <img id="imagen-que-no-actualiza" alt="user header" src="resources/images/#{crudViewADMIN.productoSelected.fotoProducto}"  style="width: 150px; height: 120px"/>
+                    </div>   
+                    <br/>
+                    <p:outputLabel for="nombreAccesorio">Nombre</p:outputLabel>
+                    <p:inputText id="nombreAccesorio" value="#{crudViewADMIN.accesorioSelected.nombreAccesorio}" required="true" requiredMessage="El nombre es requerido"/>
+
+                    <p:outputLabel for="cantidadAccesorio">Cantidad</p:outputLabel>
+                    <p:inputNumber id="cantidadAccesorio" value="#{crudViewADMIN.accesorioSelected.cantidadAccesorio}"/>
+                    <p:outputLabel for="precioAccesorio">Costo Por Unidad</p:outputLabel>
+                    <p:inputNumber id="precioAccesorio" value="#{crudViewADMIN.accesorioSelected.precioUAccesorio}" symbol="₡" />
+                    <br/>
+                    <br/>
+                    <p:commandButton value="Agregar" update=":dialogAccesorio:datatable-accesorios :dialogAccesorio:manage-accesorio-content messagesAccesorioAgregarDialog manage-accesorio-agregar-content :dialogAccesorio:precio :form:datatable-productos" 
+                                     actionListener="#{crudViewADMIN.agregarAccesorio()}" styleClass="ui-button-raised ui-button-help ui-button-outlined"
+                                     oncomplete="PF('manageAccesorioAgregarDialog').hide()"
+                                     process="manage-accesorio-agregar-content @this">
+                    </p:commandButton>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>

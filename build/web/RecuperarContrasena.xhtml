@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <link type="text/css" rel="stylesheet" href="https://www.primefaces.org/showcase/javax.faces.resource/css/layout/layout.css.xhtml?ln=showcase"></link>
+
+    </h:head>
+    <style lang="css">
+
+        body .ui-menu.ui-menubar {
+            padding: 0.5rem;
+            background: #f8f9fa00;
+            border-radius: 4px;
+        }
+
+        body .ui-menu .ui-menu-list .ui-menuitem.ui-menuitem-active > .ui-menuitem-link .ui-menuitem-icon, body .ui-menu .ui-menu-list .ui-menuitem.ui-menuitem-active > .ui-menuitem-link .ui-icon {
+            color: #9c27b0;
+        }
+    </style>
+    <div id="wrapper ">
+        <center>
+            <img src="resources/images/logoto.jpg" width="260" height="155"  />
+
+        </center>
+    </div>
+    <h:body>
+        <h:form>
+            <p:menubar >
+                <p:submenu id="menu" icon="pi pi-align-justify" >
+
+                       <p:menuitem value="Inicio" icon="pi pi-home" actionListener="#{controladorLogin.ingresarHome()}"/>
+                        <p:divider />
+                        <p:menuitem value="Carrito" icon="pi pi-shopping-cart" actionListener="#{controladorLogin.ingresarCarrito()}"/>
+                        <p:divider />
+                        <p:menuitem value="Deseo" icon="pi pi-heart" actionListener="#{crudView.ingresarListaDeseo()}" rendered="#{controladorLogin.incioSesion}" />
+                        <p:divider />
+                        <p:menuitem value="Iniciar Sesion" icon="pi pi-user" actionListener="#{controladorLogin.ingresarLogin()}" rendered="#{!controladorLogin.incioSesion}"/>
+
+                        <p:divider />
+                        <p:menuitem value = "Ordenes" icon="pi pi-chart-line" actionListener="#{controladorLogin.ingresarOrdenesAdmin()}" rendered="#{controladorLogin.tienePermisos}"/>
+                        <p:divider />
+                        <p:menuitem value="Productos" icon="pi pi-pencil" actionListener="#{controladorLogin.ingresarAdminProducto()}" rendered="#{controladorLogin.tienePermisos}" />
+                        <p:divider />
+                        <p:menuitem value="Política de Privacidad" icon="pi pi-file" actionListener="#{controladorLogin.ingresarprivacidad()}"/>
+                        <p:divider />
+                        <p:menuitem value="Términos de Uso" icon="pi pi-file" actionListener="#{controladorLogin.ingresarterminos()}" />
+                        <p:divider />
+                        <p:menuitem value="Salir" icon="pi pi-sign-out" actionListener="#{controladorLogin.cerrarSesion()}" rendered="#{controladorLogin.incioSesion}"/>
+                        
+                </p:submenu>
+
+                <p:divider layout="vertical"/>
+                <f:facet name="options">
+
+
+
+                    <p:growl id="growl" life="3000" showDetail="true"/>
+
+
+                </f:facet>
+            </p:menubar>
+        </h:form>
+
+        <center>
+            <h:body>
+
+                <h3 style ="text-align: center;">Recuperar Contraseña</h3>
+                <h5 style ="text-align: center;">Por favor complete el correo a continuación:</h5>
+
+                <h:form>
+                    <p:growl id="growl" life="3000" showDetail="true"/>
+                    <p:panelGrid columns="2">
+
+                        Correo Electronico: <p:inputText value="#{controladorLogin.correo}" required ="false" requiredMessage="El correo es requerido"/>
+                        
+                        <p:commandButton value="Volver" actionListener="#{controladorLogin.ingresarLogin()}" styleClass="ui-button-outlined ui-button-help" update="growl"/>
+                        <p:commandButton value="Confirmar" actionListener="#{controladorLogin.rcontrasena()}" styleClass="ui-button-outlined ui-button-help" update="growl"/>
+
+                    </p:panelGrid>
+                </h:form>
+            </h:body>
+        </center>
+
+    </h:body>
+
+</html>
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+
+        <div id="wrapper ">
+            <center>
+                <img src="resources/images/logoto.jpg" width="200" height="100"  />
+            </center>
+        </div>
+        <h:form>
+            <p:growl id="messages"/>
+            <p:menubar>
+                <p:submenu id="menu" icon="pi pi-align-justify">
+
+                    <p:menuitem value="Inicio" icon="pi pi-home" actionListener="#{controladorLogin.ingresarHome()}"/>
+                    <p:divider />
+                    <p:menuitem value="Carrito" icon="pi pi-shopping-cart" actionListener="#{controladorLogin.ingresarCarrito()}"/>
+                    <p:divider />
+                    <p:menuitem value="Política" icon="pi pi-file"/>
+                    <p:divider />
+                    <p:menuitem value="Términos de Uso" icon="pi pi-file"/>
+                    <p:divider />
+                    <p:menuitem value="Productos" icon="pi pi-pencil" actionListener="#{controladorLogin.ingresarAdminProducto()}" rendered="#{controladorLogin.tienePermisos}" />
+                    <p:divider />
+                    <p:menuitem value="Salir" icon="pi pi-sign-out" actionListener="#{controladorLogin.cerrarSesion()}" />
+                </p:submenu>
+
+                <p:divider layout="vertical"/>
+                <f:facet name="options">
+                    <p:growl id="growl" life="1000" showDetail="true"/>
+
+                </f:facet>
+            </p:menubar>
+        </h:form>
+
+        <h:form id="form">
+
+
+            <div id="prueba">
+                <center>
+                    <i style="font-size: 2rem"><h3 style ="text-align: center;">Compras</h3></i>
+                </center>
+                <p:panelGrid columns="2">
+
+
+                    <p:dataTable value="#{controladorLogin.listaCarritoDetalleO}" var="myVarorden" id="datatable-orden"  rows="5"
+                                 paginator="true" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                                 rowsPerPageTemplate="5,10,15,{ShowAll|'All'}">
+                        <p:column headerText="Nombre del Usuario">
+                            <h:outputText value="#{myVarorden.usuarioTO.nombreCompleto}" />
+                        </p:column>
+                        <p:column headerText="Numero de Telefono">
+                            <h:outputText value="#{myVarorden.usuarioTO.telefonoUsuario}" />
+                        </p:column>
+                        <p:column headerText="Código Producto">
+                            <h:outputText value="#{myVarorden.producto.idProducto}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{myVarorden.producto.nombreProducto}" />
+                        </p:column>
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{myVarorden.producto.descripcionProducto}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{myVarorden.carrito.fechaCreacion}" />
+                        </p:column>
+
+
+                    </p:dataTable>
+                </p:panelGrid>
+            </div>
+        </h:form>
+    </h:body>
+</html>
